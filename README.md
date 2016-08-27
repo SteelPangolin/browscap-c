@@ -12,22 +12,36 @@ Requires the [`iniparser`](https://github.com/ndevilla/iniparser) library,
 (available from [`libbsd`](https://libbsd.freedesktop.org/wiki/) on Linux)
 and `fnmatch` with the nonstandard `FNM_CASEFOLD` flag (available on Mac OS X, FreeBSD, and glibc).
 
-Assuming you've installed `iniparser` through Homebrew, you can build like this
-on Mac OS X:
+Assuming you've installed `iniparser` through Homebrew, you can build the library
+and its demo program with debug info like this on Mac OS X:
 
 ```bash
-clang -Wall -std=c11 -I$(brew --prefix)/include -L$(brew --prefix)/lib -liniparser browscap.c -o browscap
+clang -std=c11 \
+    -Wall -g \
+    -I$(brew --prefix)/include \
+    -L$(brew --prefix)/lib \
+    -liniparser \
+    -dynamiclib \
+    browscap.c \
+    -o libbrowscap.dylib
+
+clang -std=c11 \
+    -Wall -g \
+    -L. \
+    -lbrowscap \
+    browscap_demo.c \
+    -o browscap_demo
 ```
 
 ## Running
 
-Requires [Browscap's `lite_php_browscap.ini`](https://browscap.org/stream?q=Lite_PHP_BrowsCapINI)
-to be in the same folder as the `browscap` executable.
+Requires [one of Browscap's `php_browscap.ini` files](https://browscap.org/) for data.
+It supports regular, lite, and full versions, although it's slow with anything but lite.
 
-Takes user agent strings on the command line:
+The demo program takes a data file path followed by user agent strings on the command line:
 
 ```bash
-./browscap \
+./browscap_demo lite_php_browscap.ini \
     "Mozilla/5.0 (Linux; Android 5.1.1; SM-T337T Build/LMY47X) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.89 Safari/537.36" \
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36"
 ```

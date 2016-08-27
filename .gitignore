@@ -2,4 +2,8 @@
 ._*
 *browscap.ini
 *.o
-browscap
+*.a
+*.so
+*.dylib
+*.dSYM
+browscap_demo
